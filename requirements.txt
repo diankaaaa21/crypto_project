@@ -1,0 +1,12 @@
+django
+djangorestframework
+django-channels
+daphne
+websockets
+psycopg2-binary
+django-environ
+celery
+redis
+pytest
+pytest-django
+dotenv

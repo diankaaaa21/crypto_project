@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Crypto Trades</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px; margin: 4px 0; background: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h2>Live Crypto Trades</h2>
+
+    <!-- Выбор криптовалюты -->
+    <label for="crypto">Please choose a cryptocurrency:</label>
+    <select id="crypto">
+        <option value="btcusdt">BTC/USDT</option>
+        <option value="ethusdt">ETH/USDT</option>
+        <option value="bnbusdt">BNB/USDT</option>
+    </select>
+
+    <button onclick="connectWebSocket()">Connect</button>
+
+    <ul id="trade-list"></ul>
+
+    <script>
+        let socket = null;  // Global variable for WebSocket
+
+        function connectWebSocket() {
+            const selectedCrypto = document.getElementById("crypto").value;
+            const wsUrl = `ws://127.0.0.1:8000/ws/trades/${selectedCrypto}/`;
+
+            // Closing the previous connection, if there is one
+            if (socket) {
+                socket.close();
+                console.log("Closing the previous connection...");
+            }
+
+            // ОOpening the new WebSocket connection
+            socket = new WebSocket(wsUrl);
+
+            socket.onopen = function() {
+                console.log(`Connected to WebSocket: ${selectedCrypto}`);
+            };
+
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                console.log("New data:", data);
+
+                const tradeList = document.getElementById("trade-list");
+
+                const listItem = document.createElement("li");
+                listItem.textContent = `${data.symbol}: ${data.price}`;
+
+                tradeList.insertBefore(listItem, tradeList.firstChild);
+
+                if (tradeList.children.length > 10) {
+                    tradeList.removeChild(tradeList.lastChild);
+                }
+            };
+
+            socket.onerror = function(error) {
+                console.error("WebSocket error:", error);
+            };
+
+            socket.onclose = function() {
+                console.log("WebSocket is closed.");
+            };
+        }
+    </script>
+</body>
+</html>
+
