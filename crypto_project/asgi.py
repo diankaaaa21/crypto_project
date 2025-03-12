@@ -26,12 +26,3 @@ application = ProtocolTypeRouter(
     }
 )
 
-# async def start_sending_loop():
-#     import asyncio
-#     from crypto_app.consumer_logic import start_sending  # Импортируй свою функцию здесь
-#     loop = asyncio.get_event_loop()
-#     loop.create_task(start_sending())
-#
-# # Запускаем фоновую задачу после загрузки ASGI-приложения
-# import threading
-# threading.Thread(target=lambda: asyncio.run(start_sending_loop()), daemon=True).start()
