@@ -1,5 +1,6 @@
-import pytest
 import asyncio
+
+import pytest
 import websockets
 
 
@@ -11,11 +12,9 @@ async def mock_django_ws(websocket, path):
 async def websocket_server():
     server = await websockets.serve(mock_django_ws, "127.0.0.1", 8000)
 
-
     await asyncio.sleep(0.1)
 
     yield server
-
 
     server.close()
     await server.wait_closed()
@@ -26,4 +25,3 @@ async def test_websocket_server(websocket_server):
     async with websockets.connect("ws://127.0.0.1:8000") as ws:
         message = await ws.recv()
         assert message == "Hello, WebSocket!"
-

@@ -1,5 +1,7 @@
 import asyncio
+
 import websockets
+
 
 async def test_binance():
     url = "wss://stream.binance.com:9443/ws/btcusdt@trade"
@@ -11,5 +13,6 @@ async def test_binance():
                 print("Binance data:", message)
     except Exception as e:
         print(f"Connection error: {e}")
+
 
 asyncio.run(test_binance())
