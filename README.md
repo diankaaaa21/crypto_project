@@ -29,8 +29,8 @@ A Django-based project that integrates **WebSocket API from Binance** for real-t
 ## ⚙ Installation and Setup
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/yourusername/django-binance-websocket.git
-cd django-binance-websocket
+git clone https://github.com/diankaaaa21/crypto_project.git
+cd crypto_project
 ```
 
 ### 2️⃣ Create a virtual environment and install dependencies
@@ -57,7 +57,7 @@ python manage.py createsuperuser  # (Create an admin user)
 
 ### 5️⃣ Start the WebSocket server with Daphne
 ```bash
-daphne -b 0.0.0.0 -p 8000 crypto_project.asgi:application
+daphne -b 127.0.0.1 -p 8000 crypto_project.asgi:application
 ```
 💡 **Note:** `daphne` replaces `runserver` to support WebSockets.  
 
@@ -72,13 +72,13 @@ import websockets
 async def test_binance():
     url = "wss://stream.binance.com:9443/ws/btcusdt@trade"
     try:
-        print("✅ Connecting to Binance WebSocket...")
+        print("Connecting to Binance WebSocket...")
         async with websockets.connect(url) as ws:
             while True:
                 message = await ws.recv()
-                print("📩 Binance data:", message)
+                print("Binance data:", message)
     except Exception as e:
-        print(f"❌ Connection error: {e}")
+        print(f"Connection error: {e}")
 
 asyncio.run(test_binance())
 ```
@@ -92,13 +92,13 @@ async def test_django_ws():
     selected_crypto = "BTCUSDT"
     url = f"ws://127.0.0.1:8000/ws/trades/{selected_crypto}"
     try:
-        print(f"✅ Connecting to {url}...")
+        print(f"Connecting to {url}...")
         async with websockets.connect(url) as ws:
             while True:
                 message = await ws.recv()
-                print("📩 WebSocket data:", message)
+                print("WebSocket data:", message)
     except Exception as e:
-        print(f"❌ Connection error: {e}")
+        print(f"Connection error: {e}")
 
 asyncio.run(test_django_ws())
 ```
@@ -154,28 +154,34 @@ pytest
 ```
 ### 📌 **Mock WebSocket Server**
 ```python
+import pytest
 import asyncio
 import websockets
-import json
+
 
 async def mock_django_ws(websocket, path):
-    print("✅ Mock WebSocket server started!")
-    try:
-        while True:
-            fake_data = json.dumps({
-                "symbol": "BTCUSDT",
-                "price": "43250.12",
-                "quantity": "0.005",
-                "trade_time": 1700000000000
-            })
-            await websocket.send(fake_data)
-            await asyncio.sleep(1)
-    except websockets.ConnectionClosed:
-        print("🚪 Client disconnected")
+    await websocket.send("Hello, WebSocket!")
 
-start_server = websockets.serve(mock_django_ws, "127.0.0.1", 8000)
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+
+@pytest.fixture
+async def websocket_server():
+    server = await websockets.serve(mock_django_ws, "127.0.0.1", 8000)
+
+
+    await asyncio.sleep(0.1)
+
+    yield server
+
+
+    server.close()
+    await server.wait_closed()
+
+
+@pytest.mark.asyncio
+async def test_websocket_server(websocket_server):
+    async with websockets.connect("ws://127.0.0.1:8000") as ws:
+        message = await ws.recv()
+        assert message == "Hello, WebSocket!"
 ```
 ✅ **Now you can test WebSocket functionality without connecting to Binance!**
 
@@ -203,8 +209,7 @@ pytest-django
 - 🔹 **Optimize Celery for background tasks**  
 - 🔹 **Deploy on server (`gunicorn + nginx + daphne`)**  
 
-👨‍💻 **Author:** [Your Name]  
-📌 **GitHub:** [Repository Link]  
+👨‍💻 **Author:** [Diana]  
+📌 **GitHub:** [[Repository Link](https://github.com/diankaaaa21/crypto_project.git)]  
 
-🚀 **Done! Now you have a fully functional Django WebSocket integration with Binance API and REST API!** 🎉
 
