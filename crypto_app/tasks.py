@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 
 import websockets
+from asgiref.sync import async_to_sync
 from celery import shared_task
 
 from .models import Trade
@@ -60,10 +61,9 @@ async def fetch_trades(symbol):
 
 
 @shared_task
-def start_binance_ws():
+def start_binance():
     symbols = ["btcusdt", "ethusdt", "bnbusdt"]
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(
-        asyncio.gather(*(fetch_trades(symbol) for symbol in symbols))
-    )
+    loop.run_until_complete(asyncio.gather(*(fetch_trades() for symbol in symbols)))
+

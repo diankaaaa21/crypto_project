@@ -43,10 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "crypto_app",
+    "crypto_app_ws",
     "rest_framework",
     "channels",
     "pytest_django",
+    "crypto_app",
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,7 @@ ROOT_URLCONF = "crypto_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR), "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

@@ -1,11 +1,8 @@
-from django.urls import include, path
+from django.urls import include, re_path
 from rest_framework.routers import DefaultRouter
 
-from .views import TradeViewSet
-
-router = DefaultRouter()
-router.register(r"trades", TradeViewSet)
+from .views import trade_html_view
 
 urlpatterns = [
-    path("api/", include(router.urls)),
+    re_path("trades/", trade_html_view, name="trade_html"),
 ]
