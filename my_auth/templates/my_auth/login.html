@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><title>Authorization</title></head>
+<body>
+    <h2>Authorization</h2>
+    <form method="post">
+<!--        {% csrf_token %}-->
+        </p>
+          <label for="phone_number">Phone number:</label>
+          <input type="text" id="phone_number" name="phone_number" required>
+        </p>
+        </p>
+          <label for="password">Password:</label>
+          <input type="text" id="password" name="password" required>
+        </p>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if errors %}
+            <div class="errors">
+                <ul>
+                    {% for field, error_list in errors.items %}
+                        <li>{{ field }}: {% for error in error_list %} {{ error }} {% endfor %}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <button type="submit">Login</button>
+    </form>
+
+</body>
+</html>
