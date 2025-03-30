@@ -4,16 +4,6 @@ from django.shortcuts import render
 from .models import Trade
 
 
-def get_queryset(self):
-    symbol = self.request.query_params.get("symbol")
-    queryset = Trade.objects.all().order_by("-trade_time")
-
-    if symbol:
-        queryset = queryset.filter(symbol=symbol.upper())
-
-    return queryset
-
-
 def trade_html_view(request):
     symbol = request.GET.get("symbol")
     trades = Trade.objects.all().order_by("-trade_time")
