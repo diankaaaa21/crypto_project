@@ -20,6 +20,7 @@ def save_trade(symbol, price, quantity, trade_time):
 @shared_task
 def start_binance():
     import asyncio
+<<<<<<< HEAD
 
     from .binance_ws import fetch_trades
 
@@ -27,4 +28,12 @@ def start_binance():
     loop = asyncio.get_event_loop()
     for symbol in symbols:
         loop.create_task(fetch_trades(symbol))
+=======
+>>>>>>> b632589 (initial)
 
+    from .binance_ws import fetch_trades
+
+    symbols = ["btcusdt", "ethusdt", "bnbusdt"]
+    loop = asyncio.get_event_loop()
+    for symbol in symbols:
+        loop.create_task(fetch_trades(symbol))
