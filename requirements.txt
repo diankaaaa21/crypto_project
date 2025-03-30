@@ -10,3 +10,5 @@ redis
 pytest
 pytest-django
 dotenv
+rest_framework_simplejwt
+django-celery-beat
