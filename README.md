@@ -67,7 +67,7 @@ docker-compose up --build
 - REST API (trades): http://localhost:8000/trades/
 - Auth/register (если есть): http://localhost:8000/auth/register/
 
-
+---
 ## 📡 WebSocket Client
 ### 📌 **Test Binance WebSocket API**
 ```python
