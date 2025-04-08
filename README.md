@@ -3,26 +3,27 @@
 A Django-based project that integrates **WebSocket API from Binance** for real-time cryptocurrency price tracking.
 
 ## 📡 Features
-✔ **Connect to Binance WebSocket API** (`wss://stream.binance.com:9443/ws/btcusdt@trade`).  
-✔ **Receive real-time price updates** for selected cryptocurrency pairs (e.g., BTC/USDT, ETH/USDT).  
-✔ **Store price updates in PostgreSQL**.  
-✔ **Django WebSocket Server** (Django Channels) to **stream live updates to clients**.  
-✔ **REST API** to view historical price changes.  
-✔ **Filter prices by trading pairs** (`?symbol=btcusdt`).  
-✔ **Testing** with pytest and Mock WebSocket.  
-✔ **WebSocket server runs with Daphne**.  
-✔ **Dotenv support** for environment variables.  
+- ✅ Real-time updates via **Binance WebSocket API**
+- ✅ Track multiple trading pairs (e.g., `BTCUSDT`, `ETHUSDT`)
+- ✅ **WebSocket server** using **Django Channels** and **Daphne**
+- ✅ **PostgreSQL** for persistent storage
+- ✅ **Redis** (optional) for caching or background task management
+- ✅ **Celery** (optional) for async processing
+- ✅ **REST API** to retrieve and filter historical trade data
+- ✅ **Dockerized** with **Docker Compose** + **Nginx**
+- ✅ Easy testing with `pytest` and Mock WebSocket server
+- ✅ **.env** support for configuration 
 
 ---
 
 ## 📦 Tech Stack
-- **Django** + **Django REST Framework** – Backend API  
-- **Django Channels** + **Daphne** – WebSockets  
-- **PostgreSQL** – Data storage  
-- **Redis** *(optional)* – Caching  
-- **Celery** *(optional)* – Background tasks  
-- **pytest + Mock WebSocket** – Testing  
-- **dotenv** – Environment variable management  
+- **Backend:** Django, Django REST Framework  
+- **WebSocket:** Django Channels, Daphne  
+- **Database:** PostgreSQL  
+- **Background Tasks:** Celery, Redis  
+- **Testing:** Pytest, Websockets  
+- **DevOps:** Docker, Docker Compose, Nginx  
+- **Env Management:** python-dotenv 
 
 ---
 
@@ -45,7 +46,7 @@ Create a **`.env`** file:
 ```
 SECRET_KEY=your-secret-key
 DEBUG=True
-ALLOWED_HOSTS=127.0.0.1,localhost
+ALLOWED_HOSTS=db,localhost
 DATABASE_URL=postgres://user:password@localhost:5432/db_name
 ```
 
@@ -53,15 +54,19 @@ DATABASE_URL=postgres://user:password@localhost:5432/db_name
 ```bash
 python manage.py migrate
 python manage.py createsuperuser  # (Create an admin user)
-```
-
-### 5️⃣ Start the WebSocket server with Daphne
-```bash
-daphne -b 127.0.0.1 -p 8000 crypto_project.asgi:application
-```
-💡 **Note:** `daphne` replaces `runserver` to support WebSockets.  
+``` 
 
 ---
+## 🐳 Dockerized Setup
+### 🔹 Start with Docker Compose
+```bash
+docker-compose up --build
+```
+### 🔹 Access services
+- - WebSocket: ws://localhost:8100/
+- REST API (trades): http://localhost:8000/trades/
+- Auth/register (если есть): http://localhost:8000/auth/register/
+
 
 ## 📡 WebSocket Client
 ### 📌 **Test Binance WebSocket API**
@@ -108,7 +113,7 @@ asyncio.run(test_django_ws())
 ## 🔌 REST API
 ### 📌 **Get historical price data**
 ```http
-GET /api/trades/
+GET /trades/
 ```
 Example response:
 ```json
@@ -124,7 +129,7 @@ Example response:
 
 ### 📌 **Filter by symbol (e.g., BTCUSDT)**
 ```http
-GET /api/trades/?symbol=btcusdt
+GET /trades/?symbol=btcusdt
 ```
 Example response:
 ```json
@@ -200,14 +205,17 @@ celery
 redis
 pytest
 pytest-django
+flower
 ```
 
 ---
 
-## 🚀 What's next?
-- 🔹 **Add caching with Redis**  
-- 🔹 **Optimize Celery for background tasks**  
-- 🔹 **Deploy on server (`gunicorn + nginx + daphne`)**  
+## 🚀 Deployment (Production)
+- ✅ gunicorn + nginx + daphne ready 
+- ✅ Configurable through .env
+- ✅ Dockerized for easy deployment
+- ⏳ Add HTTPS with Let's Encrypt (via Nginx)
+- ⏳ Add monitoring (e.g., Flower)
 
 👨‍💻 **Author:** [Diana]  
 📌 **GitHub:** [[Repository Link](https://github.com/diankaaaa21/crypto_project.git)]  
