@@ -178,7 +178,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",  # глобально требуем авторизацию
+        "rest_framework.permissions.IsAuthenticated",  
     ),
 }
 from datetime import timedelta
@@ -214,14 +214,4 @@ LOGGING = {
     },
 }
 
-# AUTHENTICATION_BACKENDS = ['crypto_project.auth_backends.PhoneNumberAuthBackend']
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.SessionAuthentication',
-#         'rest_framework.authentication.BasicAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
-# }
