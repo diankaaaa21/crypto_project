@@ -34,3 +34,8 @@ async def fetch_trades(symbol):
                 f"Error while retrieving data from  {symbol}: {e}", exc_info=True
             )
             await asyncio.sleep(10)
+
+
+async def start_binance():
+    symbols = ["btcusdt", "ethusdt", "bnbusdt"]
+    await asyncio.gather(*(fetch_trades(symbol) for symbol in symbols))

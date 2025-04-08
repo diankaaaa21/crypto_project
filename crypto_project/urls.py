@@ -18,7 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from crypto_app_ws.views import index
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("crypto_app.urls")),
+    path("auth/", include("my_auth.urls", namespace="auth_app")),
+    path("", index, name="index"),
 ]

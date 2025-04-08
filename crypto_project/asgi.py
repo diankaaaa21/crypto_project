@@ -15,11 +15,6 @@ from django.core.asgi import get_asgi_application
 
 from crypto_app_ws.routing import websocket_urlpatterns
 
-<<<<<<< HEAD
-
-=======
-# from crypto_app_ws.consumer_logic import start_sending
->>>>>>> 59cc3fa (initial)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "crypto_project.settings")
 
 application = ProtocolTypeRouter(
@@ -28,16 +23,3 @@ application = ProtocolTypeRouter(
         "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
     }
 )
-
-<<<<<<< HEAD
-=======
-# async def start_sending_loop():
-#     import asyncio
-#     from crypto_app_ws.consumer_logic import start_sending  # Импортируй свою функцию здесь
-#     loop = asyncio.get_event_loop()
-#     loop.create_task(start_sending())
-#
-# # Запускаем фоновую задачу после загрузки ASGI-приложения
-# import threading
-# threading.Thread(target=lambda: asyncio.run(start_sending_loop()), daemon=True).start()
->>>>>>> 59cc3fa (initial)

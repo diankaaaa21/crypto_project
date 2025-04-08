@@ -1,12 +1,12 @@
 from django.urls import path
 
-from .views import LoginView, Register, StartView, LogoutView
+from .views import LoginView, LogoutView, RegisterView, StartView
 
-app_name = "crypto_project"
+app_name = "my_auth"
 
 urlpatterns = [
     path("start/", StartView.as_view(), name="startpage"),
-    path("register/", Register.as_view(), name="registration"),
+    path("register/", RegisterView.as_view(), name="registration"),
     path("login/", LoginView.as_view(), name="login"),
-    path("logout/", LogoutView.as_view(), name="logout")
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]

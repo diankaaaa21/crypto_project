@@ -1,10 +1,12 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.db.utils import IntegrityError
 from django.shortcuts import redirect, render
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+
 from .models import CustomUser
-from .serializator import LoginSerializer, RegisterSerializer
+from .serializers import LoginSerializer, RegisterSerializer
+from .throttling import LoginRateThrottle
+from .utils import set_jwt_cookies
 
 
 class StartView(APIView):
@@ -12,7 +14,7 @@ class StartView(APIView):
         return render(request, "my_auth/startpage.html")
 
 
-class Register(APIView):
+class RegisterView(APIView):
     def get(self, request):
         return render(request, "my_auth/registration.html")
 
@@ -26,7 +28,8 @@ class Register(APIView):
                 user = CustomUser.objects.create_user(
                     phone_number=phone_number, first_name=first_name, password=password
                 )
-                return self._set_tokens(user)
+                response = redirect("/trades/")
+                return set_jwt_cookies(response, user)
             except IntegrityError:
                 return render(
                     request,
@@ -40,49 +43,26 @@ class Register(APIView):
 
 
 class LoginView(APIView):
+    throttle_classes = [LoginRateThrottle]
+
     def get(self, request):
         return render(request, "my_auth/login.html")
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            phone_number = serializer.validated_data["phone_number"]
-            password = serializer.validated_data["password"]
-            user = authenticate(phone_number=phone_number, password=password)
-            if not user:
-                return render(
-                    request, "my_auth/login.html", {"error": "User doesn't exist"}
-                )
+            user = serializer.validated_data["user"]
             login(request, user)
-            return self._set_tokens(user)
+            response = redirect("crypto_app/trades")
+            return set_jwt_cookies(response, user)
+
         return render(request, "my_auth/login.html", {"errors": serializer.errors})
 
-    def _set_tokens(self, user):
-        """Генерирует и сохраняет JWT-токены в cookies"""
-        refresh = RefreshToken.for_user(user)
-        access_token = str(refresh.access_token)
-
-        response = redirect("crypto_app/trades/")
-        response.set_cookie(
-            key="access_token",
-            value=access_token,
-            httponly=True,
-            secure=False,
-            samesite="Lax",
-        )
-        response.set_cookie(
-            key="refresh_token",
-            value=str(refresh),
-            httponly=True,
-            secure=False,
-            samesite="Lax",
-        )
-        return response
 
 class LogoutView(APIView):
     def post(self, request):
         logout(request)
-        response = redirect("/login/")
+        response = redirect("auth_app:startpage")
         response.delete_cookie("access_token")
         response.delete_cookie("refresh_token")
         return response

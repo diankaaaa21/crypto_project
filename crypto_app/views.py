@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from .models import Trade
 
 
+@login_required(login_url="auth_app:login")
 def trade_html_view(request):
     symbol = request.GET.get("symbol")
     trades = Trade.objects.all().order_by("-trade_time")
