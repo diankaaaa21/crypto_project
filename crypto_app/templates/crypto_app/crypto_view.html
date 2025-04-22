@@ -19,7 +19,7 @@
         </select>
         <button type="submit">Filter</button>
     </form>
-    <form method="post" action="{% url 'auth_app:logout' %}" style="display:inline;">
+    <form method="post" action="{% url 'my_auth:logout' %}" style="display:inline;">
         {% csrf_token %}
         <button type="submit">Log out</button>
     </form>
@@ -67,7 +67,7 @@
         <span>Page {{ trades.number }} from {{ trades.paginator.num_pages }}</span>
 
         {% if trades.has_next %}
-            <a href="?symbol={{ selected_symbol }}&page={{ trades.next_page_number }}">Forward ➡️</a>
+            <a href="?symbol={{ selected_symbol }}&page={{ trades.next_page_number }}">Next ➡️</a>
             <a href="?symbol={{ selected_symbol }}&page={{ trades.paginator.num_pages }}">Last ⏩</a>
         {% endif %}
     </div>

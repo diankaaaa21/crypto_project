@@ -110,6 +110,13 @@ CHANNEL_LAYERS = {
         },
     },
 }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -159,7 +166,7 @@ if "pytest" in os.environ.get("DJANGO_SETTINGS_MODULE", ""):
             "NAME": os.getenv("DB_NAME"),
             "USER": os.getenv("DB_USER"),
             "PASSWORD": os.getenv("DB_PASSWORD"),
-            "HOST": os.getenv("DB_HOST", "localhost"),
+            "HOST": os.getenv("DB_HOST", "db"),
             "PORT": os.getenv("DB_PORT", "5432"),
         }
     }
@@ -177,9 +184,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",  
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 from datetime import timedelta
 
@@ -215,3 +220,7 @@ LOGGING = {
 }
 
 
+INTERNAL_IPS = ["127.0.0.1", "172.17.0.1"]
+
+
+LOGIN_REDIRECT_URL = "/trades/trades/"

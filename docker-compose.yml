@@ -76,6 +76,21 @@ services:
     depends_on:
       - web
 
+  test:
+    build: .
+    command: [ "pytest", "--reuse-db" ]
+    volumes:
+      - .:/app
+    env_file:
+      - .env.test
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+    depends_on:
+      - db
 
 volumes:
   pgdata:

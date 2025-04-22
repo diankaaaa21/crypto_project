@@ -22,7 +22,7 @@ from crypto_app_ws.views import index
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("crypto_app.urls")),
-    path("auth/", include("my_auth.urls", namespace="auth_app")),
+    path("trades/", include("crypto_app.urls", "crypto_app")),
+    path("auth/", include("my_auth.urls", "my_auth")),
     path("", index, name="index"),
 ]

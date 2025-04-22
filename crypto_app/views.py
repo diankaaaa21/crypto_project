@@ -1,24 +1,26 @@
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.shortcuts import render
 
-from .models import Trade
+from .services.crypto_sevice import get_paginator_trade
 
 
-@login_required(login_url="auth_app:login")
+@login_required(login_url="my_auth:login")
 def trade_html_view(request):
+
     symbol = request.GET.get("symbol")
-    trades = Trade.objects.all().order_by("-trade_time")
+    page_number = request.GET.get("page", "1")
 
-    if symbol:
-        trades = trades.filter(symbol=symbol.upper())
+    page_data = get_paginator_trade(symbol, page_number)
 
-    paginator = Paginator(trades, 50)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    context = {
+        "trades": page_data["data"],
+        "page_info": {
+            "number": page_data["number"],
+            "has_next": page_data["has_next"],
+            "has_previous": page_data["has_previous"],
+            "num_pages": page_data["num_pages"],
+        },
+        "selected_symbol": symbol,
+    }
 
-    return render(
-        request,
-        "crypto_app/crypto_view.html",
-        {"trades": page_obj, "selected_symbol": symbol},
-    )
+    return render(request, "crypto_app/crypto_view.html", context)

@@ -16,9 +16,12 @@ psycopg2-binary==2.9.9
 django-environ==0.11.2
 python-dotenv==1.0.1
 
-pytest==8.1.1
+pytest
 pytest-django==4.8.0
 
 flower
 daphne
+
+
+pytest-asyncio==0.26.0
 
