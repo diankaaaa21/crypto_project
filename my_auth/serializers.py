@@ -15,7 +15,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate_phone_number(self, value):
         if CustomUser.objects.filter(phone_number=value).exists():
-            raise serializers.ValidationError("This phone number is already in use.")
+            raise serializers.ValidationError(
+                "This phone number is already in use.")
         return value
 
 

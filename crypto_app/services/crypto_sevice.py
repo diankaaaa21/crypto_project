@@ -12,7 +12,8 @@ def get_paginator_trade(
     if cached_data:
         return cached_data
 
-    trades = Trade.objects.only("symbol", "price", "trade_time").order_by("-trade_time")
+    trades = Trade.objects.only(
+        "symbol", "price", "trade_time").order_by("-trade_time")
 
     if symbol:
         trades = trades.filter(symbol=symbol.upper())

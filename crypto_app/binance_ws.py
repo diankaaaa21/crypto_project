@@ -5,6 +5,8 @@ import logging
 import websockets
 from celery import current_app
 
+logger = logging.getLogger(__name__)
+
 
 async def fetch_trades(symbol):
     url = f"wss://stream.binance.com:9443/ws/{symbol.lower()}@trade"
@@ -12,7 +14,7 @@ async def fetch_trades(symbol):
     while True:
         try:
             async with websockets.connect(url, ping_interval=30) as websocket:
-                logging.info(f"Connected to {url}")
+                logger.info(f"Connected to {url}")
 
                 while True:
                     data = await websocket.recv()
@@ -23,14 +25,15 @@ async def fetch_trades(symbol):
                         args=[data["s"], data["p"], data["q"], data["T"]],
                     )
 
-                    logging.debug(f"The data is saved: {data}")
+                    logger.debug(f"The data is saved: {data}")
 
         except websockets.exceptions.ConnectionClosed:
-            logging.warning(f"Connection with {symbol} interrupted. Restarting...")
+            logger.warning(
+                f"Connection with {symbol} interrupted. Restarting...")
             await asyncio.sleep(5)
 
         except Exception as e:
-            logging.critical(
+            logger.critical(
                 f"Error while retrieving data from  {symbol}: {e}", exc_info=True
             )
             await asyncio.sleep(10)

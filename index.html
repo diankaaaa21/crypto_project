@@ -33,7 +33,7 @@
       const wsUrl = `ws://${window.location.host}/ws/trades/${selectedCrypto}/`;
 
       if (socket && socket.readyState === WebSocket.OPEN) {
-        console.log("🔁 Already connected");
+        console.log("Already connected");
         return;
       }
 

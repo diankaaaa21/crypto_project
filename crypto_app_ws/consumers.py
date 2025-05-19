@@ -12,7 +12,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.symbol = self.scope["url_route"]["kwargs"]["symbol"]
         await self.accept()
-        logger.info(f"✅ WebSocket connected for: {self.symbol}")
+        logger.info(f"WebSocket connected for: {self.symbol}")
         await self.send(text_data=json.dumps({"message": "WebSocket connected"}))
 
         self.binance_task = asyncio.create_task(self.listen_to_binance())
@@ -26,7 +26,7 @@ class TradeConsumer(AsyncWebsocketConsumer):
                 logger.info("Binance stream cancelled")
 
     async def receive(self, text_data):
-        pass  # not used now
+        pass
 
     async def listen_to_binance(self):
         url = f"wss://stream.binance.com:9443/ws/{self.symbol}@trade"
