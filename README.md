@@ -63,7 +63,7 @@ python manage.py createsuperuser  # (Create an admin user)
 docker-compose up --build
 ```
 ### 🔹 Access services
-- - WebSocket: ws://localhost:8100/
+- WebSocket: ws://localhost:8100/
 - REST API (trades): http://localhost:8000/trades/
 - Auth/register (если есть): http://localhost:8000/auth/register/
 
