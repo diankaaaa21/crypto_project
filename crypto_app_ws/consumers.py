@@ -1,11 +1,11 @@
 import asyncio
 import json
-import logging
+from crypto_project.shortcuts import file_logger
 
 import websockets
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-logger = logging.getLogger(__name__)
+logger = file_logger('crypto_app_ws')
 
 
 class TradeConsumer(AsyncWebsocketConsumer):

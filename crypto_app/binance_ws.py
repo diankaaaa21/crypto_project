@@ -1,11 +1,11 @@
 import asyncio
 import json
-import logging
+from crypto_project.shortcuts import file_logger
 
 import websockets
 from celery import current_app
 
-logger = logging.getLogger(__name__)
+logger = file_logger('crypto_app')
 
 
 async def fetch_trades(symbol):
