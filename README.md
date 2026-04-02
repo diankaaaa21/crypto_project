@@ -53,7 +53,7 @@ DATABASE_URL=postgres://user:password@localhost:5432/db_name
 ### 4️⃣ Database setup
 ```bash
 python manage.py migrate
-python manage.py createsuperuser  # (Create an admin user)
+python manage.py createsuperuser 
 ``` 
 
 ---
