@@ -6,7 +6,10 @@ from django.conf import settings
 
 
 def file_logger(name, _handler=None):
-    filename = os.path.join(settings.DJANGO_ROOT, "var", "log", f"{name}.log")
+    log_dir = os.path.join(settings.DJANGO_ROOT, "var", "log")
+    os.makedirs(log_dir, exist_ok=True)
+
+    filename = os.path.join(log_dir, f"{name}.log")
     log = logging.getLogger(name)
     if log.handlers:
         return log

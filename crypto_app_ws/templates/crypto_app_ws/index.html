@@ -1,84 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Live Crypto Trades</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    ul { list-style-type: none; padding: 0; }
-    li { padding: 8px; margin: 4px 0; background: #f4f4f4; border-radius: 6px; }
-    .message { color: green; font-style: italic; }
-    .warning { color: red; font-style: italic; }
-  </style>
-</head>
-<body>
-  <h2>Live Crypto Trades</h2>
+{% extends 'base.html' %}
+{% load static %}
 
-  <label for="crypto">Please choose a cryptocurrency:</label>
-  <select id="crypto">
-    <option value="btcusdt">BTC/USDT</option>
-    <option value="ethusdt">ETH/USDT</option>
-    <option value="bnbusdt">BNB/USDT</option>
-  </select>
+{% block title %}Live Crypto Trades{% endblock %}
 
-  <button onclick="connectWebSocket()">Connect</button>
+{% block content %}
+    <h2>Live Crypto Trades</h2>
 
-  <ul id="trade-list"></ul>
+    <label for="crypto">Please choose a cryptocurrency:</label>
 
-  <script>
-    let socket = null;
+    <select id="crypto">
+        <option value="btcusdt">BTC/USDT</option>
+        <option value="ethusdt">ETH/USDT</option>
+        <option value="bnbusdt">BNB/USDT</option>
+    </select>
 
-    function connectWebSocket() {
-      const selectedCrypto = document.getElementById("crypto").value;
-      const wsUrl = `ws://${window.location.host}/ws/trades/${selectedCrypto}/`;
+    <button type="button" id="connect-btn" onclick="connectWebSocket()">Connect</button>
 
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        console.log("Already connected");
-        return;
-      }
+    <ul id="trade-list" class="trade-list"></ul>
+{% endblock %}
 
-      socket = new WebSocket(wsUrl);
-
-      socket.onopen = () => {
-        console.log(`Connected to WebSocket: ${selectedCrypto}`);
-      };
-
-      socket.onmessage = (event) => {
-        console.log("RAW WebSocket message:", event.data);
-
-        const data = JSON.parse(event.data);
-
-        const tradeList = document.getElementById("trade-list");
-        const listItem = document.createElement("li");
-
-        if (data.symbol && data.price) {
-          listItem.textContent = `${data.symbol}: ${data.price}`;
-        } else if (data.message) {
-          listItem.textContent = `${data.message}`;
-          listItem.classList.add("message");
-        } else {
-          listItem.textContent = `Unknown data: ${JSON.stringify(data)}`;
-          listItem.classList.add("warning");
-        }
-
-        tradeList.insertBefore(listItem, tradeList.firstChild);
-
-        if (tradeList.children.length > 10) {
-          tradeList.removeChild(tradeList.lastChild);
-        }
-      };
-
-      socket.onerror = (error) => {
-        console.error("WebSocket error:", error);
-      };
-
-      socket.onclose = () => {
-        console.log("WebSocket closed.");
-      };
-    }
-  </script>
-</body>
-</html>
-
-
-
+{% block extra_js %}
+    <script src="{% static 'js/ws_trades_v2.js' %}"></script>
+{% endblock %}

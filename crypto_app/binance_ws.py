@@ -1,9 +1,10 @@
 import asyncio
 import json
-from crypto_project.shortcuts import file_logger
-
 import websockets
+
 from celery import current_app
+
+from crypto_project.shortcuts import file_logger
 
 logger = file_logger('crypto_app')
 
