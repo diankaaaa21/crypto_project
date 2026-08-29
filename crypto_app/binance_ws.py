@@ -20,6 +20,13 @@ async def fetch_trades(symbol):
                 while True:
                     data = await websocket.recv()
                     data = json.loads(data)
+                    logger.info(
+                        f"BINANCE TRADE: symbol={data['s']}, "
+                        f"trade_id={data['t']}, "
+                        f"price={data['p']}, "
+                        f"quantity={data['q']}, "
+                        f"timestamp={data['T']}"
+                    )
 
                     current_app.send_task(
                         "crypto_app.tasks.save_trade",
